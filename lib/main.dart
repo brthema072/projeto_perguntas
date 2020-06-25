@@ -1,66 +1,62 @@
 import 'package:flutter/material.dart';
+import './questao.dart';
+import './resposta.dart';
 
-void main() {
-  runApp(MyApp());
-}
+main()=> runApp(PerguntaApp());
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Meu App Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyHomePage(title: 'Meu App'),
-    );
-  }
-}
+class _PerguntaAppState extends State<PerguntaApp>{
+  var _perguntaSelecionada = 0;
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
+  void _responder(){
     setState(() {
-      _counter++;
+      _perguntaSelecionada++;
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times: ',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+   @override
+    Widget build(BuildContext context){
+
+      final List<Map<String, Object>> perguntas = [
+        {
+          'texto': 'Qual é a sua cor favorita?',
+          'Resposta': ['Preto', 'Vermelho', 'Verde', 'Branco']
+        },
+        {
+          'texto':'Qual é o seu animal favorito?',
+          'Resposta': ['Coelho', 'Cobra', 'Elefante', 'Leão']
+        },
+        {
+          'texto':'Qual é o seu instrutor favorito?',
+          'Resposta': ['Maria', 'João', 'Leo', 'Pedro']
+        },
+      ];
+
+      List<String> respostas = perguntas[_perguntaSelecionada]['Resposta'];
+      
+
+      return MaterialApp(
+        home: Scaffold(
+          appBar: AppBar(
+            title: Text('Perguntas'),
+          ),
+          body: Column(
+            children: <Widget>[
+              
+              Questao(perguntas[_perguntaSelecionada]['texto']),
+              ...respostas.map((t) => Resposta(t, _responder)).toList()
+             
+            ],
+          ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+      );
+    }
+
+}
+
+class PerguntaApp extends StatefulWidget{
+
+  State<PerguntaApp> createState(){
+    return _PerguntaAppState();
   }
+ 
 }
